@@ -12,7 +12,10 @@ const Button = ({ handleClick, title }) => {
 
 const Statistic = ({ text, value }) => {
   return (
-    <p>{text === "Positive" ? `${text}: ${value}%` : `${text}: ${value}`}</p>
+    <tr>
+      <td>{text}</td>
+      {text === "Positive" ? <td>{value} %</td> : <td>{value}</td>}
+    </tr>
   );
 };
 
@@ -23,14 +26,16 @@ const Statistics = ({ good, neutral, bad, average, positive, total }) => {
       {total === 0 ? (
         <p>No Feedback given</p>
       ) : (
-        <div>
-          <Statistic text="Good" value={good} />
-          <Statistic text="Neutral" value={neutral} />
-          <Statistic text="Bad" value={bad} />
-          <Statistic text="All" value={total} />
-          <Statistic text="Average" value={average} />
-          <Statistic text="Positive" value={positive} />
-        </div>
+        <table>
+          <tbody>
+            <Statistic text="Good" value={good} />
+            <Statistic text="Neutral" value={neutral} />
+            <Statistic text="Bad" value={bad} />
+            <Statistic text="All" value={total} />
+            <Statistic text="Average" value={average} />
+            <Statistic text="Positive" value={positive} />
+          </tbody>
+        </table>
       )}
     </>
   );
@@ -43,8 +48,8 @@ const App = () => {
   const [bad, setBad] = useState(0);
 
   const total = good + neutral + bad;
-  let averageScore = (good - bad) / total; //(good: 1, neutral: 0, bad: -1)
-  let positive = (good / total) * 100;
+  let averageScore = ((good - bad) / total).toFixed(1); //(good: 1, neutral: 0, bad: -1)
+  let positive = ((good / total) * 100).toFixed(1);
 
   if (!positive) positive = 0;
   if (!averageScore) averageScore = 0;
