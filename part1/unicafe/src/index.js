@@ -10,22 +10,30 @@ const Button = ({ handleClick, title }) => {
   return <button onClick={handleClick}>{title}</button>;
 };
 
+const Statistic = ({ text, value }) => {
+  return (
+    <p>{text === "Positive" ? `${text}: ${value}%` : `${text}: ${value}`}</p>
+  );
+};
+
 const Statistics = ({ good, neutral, bad, average, positive, total }) => {
-  if(total){
-    return(
-      <>
+  return (
+    <>
       <h2>Statistics</h2>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {total}</p>
-      <p>Average: {average}</p>
-      <p>Positive: {positive}%</p>
+      {total === 0 ? (
+        <p>No Feedback given</p>
+      ) : (
+        <div>
+          <Statistic text="Good" value={good} />
+          <Statistic text="Neutral" value={neutral} />
+          <Statistic text="Bad" value={bad} />
+          <Statistic text="All" value={total} />
+          <Statistic text="Average" value={average} />
+          <Statistic text="Positive" value={positive} />
+        </div>
+      )}
     </>
-    )
-  }else{
-    return <p>No Feedback given</p>
-  }
+  );
 };
 
 const App = () => {
