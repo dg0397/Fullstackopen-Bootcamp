@@ -1,8 +1,8 @@
 import React from "react";
 
-const SingleCountrie = ({ countrie }) => {
-  console.log(countrie);
-  const { name, capital, population, languages, flag } = countrie;
+const SingleCountry = ({ country }) => {
+  console.log(country);
+  const { name, capital, population, languages, flag } = country;
   return (
     <div>
       <h2>{name}</h2>
@@ -21,4 +21,4 @@ const SingleCountrie = ({ countrie }) => {
   );
 };
 
-export default SingleCountrie;
+export default SingleCountry;
