@@ -12,13 +12,12 @@ const App = () => {
   const [searchValue, setSearchValue] = useState("");
   const [peopleToShow, setPeopleToShow] = useState([]);
 
-  useEffect(()=>{
-    axios.get("http://localhost:3001/persons")
-          .then(({data}) =>{
-            setPersons(data);
-            setPeopleToShow(data)
-          })
-  },[])
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then(({ data }) => {
+      setPersons(data);
+      setPeopleToShow(data);
+    });
+  }, []);
 
   const handleSearch = (e) => {
     if (searchValue === "") {
