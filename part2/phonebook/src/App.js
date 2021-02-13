@@ -20,12 +20,12 @@ const App = () => {
   }, []);
 
   const handleSearch = (e) => {
-    if (searchValue === "") {
+    if (e.target.value === "") {
       setPeopleToShow(persons);
     } else {
       setPeopleToShow(() =>
         persons.filter((person) => {
-          const regex = new RegExp(searchValue, "gi");
+          const regex = new RegExp(e.target.value, "gi");
           return regex.test(person.name);
         })
       );
