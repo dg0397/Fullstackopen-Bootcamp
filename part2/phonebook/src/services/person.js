@@ -15,8 +15,10 @@ const update = (id, newPerson) => {
     .then((response) => response.data);
 };
 
-export default {
-  getAll,
-  create,
-  update,
-};
+const services = {
+    getAll,
+    update,
+    create
+}
+
+export default services

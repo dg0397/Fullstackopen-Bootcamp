@@ -13,6 +13,7 @@ const App = () => {
   const [peopleToShow, setPeopleToShow] = useState([]);
 
   useEffect(() => {
+    //Get all the persons from the server
     personService.getAll().then((data) => {
       setPersons(data);
       setPeopleToShow(data);
@@ -44,7 +45,7 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-
+      //create a new Person and send the data to the server
       personService.create(person).then((retornedPerson) => {
         setPersons(persons.concat(retornedPerson));
         setPeopleToShow(persons.concat(retornedPerson));
