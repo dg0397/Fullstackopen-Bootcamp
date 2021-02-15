@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 import personService from "./services/person";
 
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [peopleToShow, setPeopleToShow] = useState([]);
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     //Get all the persons from the server
@@ -55,6 +57,10 @@ const App = () => {
         personService
           .update(changedPerson.id, changedPerson)
           .then((retornedPerson) => {
+            setNotification(`Updated ${newName} number`);
+            setTimeout(() => {
+              setNotification("");
+            }, 5000);
             setPersons(
               persons.map((person) =>
                 person.id !== retornedPerson.id ? person : retornedPerson
@@ -76,6 +82,10 @@ const App = () => {
       };
       //create a new Person and send the data to the server
       personService.create(person).then((retornedPerson) => {
+        setNotification(`Added ${newName}`);
+        setTimeout(() => {
+          setNotification("");
+        }, 5000);
         setPersons(persons.concat(retornedPerson));
         setPeopleToShow(persons.concat(retornedPerson));
         setNewName("");
@@ -91,11 +101,25 @@ const App = () => {
       )
     ) {
       //delete a person
-      personService.deletePerson(id).then((response) => {
-        console.log(response);
-        setPersons(persons.filter((person) => person.id !== id));
-        setPeopleToShow(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .deletePerson(id)
+        .then((response) => {
+          console.log(response);
+          setPersons(persons.filter((person) => person.id !== id));
+          setPeopleToShow(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          setNotification(
+            `${
+              peopleToShow.find((person) => person.id === id).name
+            } was already deleted from the server`
+          );
+          setTimeout(() => {
+            setNotification("");
+          }, 5000);
+          setPersons(persons.filter((person) => person.id !== id));
+          setPeopleToShow(persons.filter((person) => person.id !== id));
+        });
     }
   };
 
@@ -110,6 +134,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification} />
       <Filter searchValue={searchValue} handleSearch={handleSearch} />
       <h2>Add a New</h2>
       <PersonForm
