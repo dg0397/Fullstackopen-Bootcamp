@@ -36,10 +36,39 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (persons.map((person) => person.name).includes(newName)) {
+    if (
+      persons.map((person) => person.name).includes(newName) &&
+      persons.map((person) => person.number).includes(newNumber)
+    ) {
       alert(`${newName} is already added to phonebook`);
       setNewName("");
       setNewNumber("");
+    } else if (persons.map((person) => person.name).includes(newName)) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        //updating a person number
+        const person = persons.find((person) => person.name === newName);
+        const changedPerson = { ...person, number: newNumber };
+        personService
+          .update(changedPerson.id, changedPerson)
+          .then((retornedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== retornedPerson.id ? person : retornedPerson
+              )
+            );
+            setPeopleToShow(
+              persons.map((person) =>
+                person.id !== retornedPerson.id ? person : retornedPerson
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
     } else {
       const person = {
         name: newName,
@@ -56,7 +85,12 @@ const App = () => {
   };
 
   const handleDeletePerson = (id) => {
-    if(window.confirm(`Delete ${peopleToShow.find(person => person.id === id).name}`)){
+    if (
+      window.confirm(
+        `Delete ${peopleToShow.find((person) => person.id === id).name}`
+      )
+    ) {
+      //delete a person
       personService.deletePerson(id).then((response) => {
         console.log(response);
         setPersons(persons.filter((person) => person.id !== id));
