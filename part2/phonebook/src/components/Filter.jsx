@@ -4,7 +4,7 @@ const Filter = ({ searchValue, handleSearch }) => {
   return (
     <form>
       <label>
-      Filter Show with 
+      Filter Show with:  
       <input value={searchValue} onChange={handleSearch} />
       </label>
     </form>

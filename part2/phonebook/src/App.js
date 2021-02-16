@@ -73,6 +73,22 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+          })
+          .catch((error) => {
+            setNotification(
+              `Information of ${changedPerson.name} has already deleted from the server`
+            );
+            setTimeout(() => {
+              setNotification("");
+            }, 5000);
+            setPersons(
+              persons.filter((person) => person.id !== changedPerson.id)
+            );
+            setPeopleToShow(
+              persons.filter((person) => person.id !== changedPerson.id)
+            );
+            setNewName("");
+            setNewNumber("");
           });
       }
     } else {
@@ -110,9 +126,9 @@ const App = () => {
         })
         .catch((error) => {
           setNotification(
-            `${
+            `Information of ${
               peopleToShow.find((person) => person.id === id).name
-            } was already deleted from the server`
+            } has already deleted from the server`
           );
           setTimeout(() => {
             setNotification("");
@@ -132,23 +148,25 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <Notification message={notification} />
-      <Filter searchValue={searchValue} handleSearch={handleSearch} />
-      <h2>Add a New</h2>
-      <PersonForm
-        handleSubmit={handleSubmit}
-        handleNumberInput={handleNumberInput}
-        handleNameInput={handleNameInput}
-        newName={newName}
-        newNumber={newNumber}
-      />
-      <h2>Numbers</h2>
-      <Persons
-        peopleToShow={peopleToShow}
-        handleDeletePerson={handleDeletePerson}
-      />
+    <div className="app">
+      <div className="app-content">
+        <h1>Phonebook</h1>
+        <Notification message={notification} />
+        <Filter searchValue={searchValue} handleSearch={handleSearch} />
+        <h2>Add a New</h2>
+        <PersonForm
+          handleSubmit={handleSubmit}
+          handleNumberInput={handleNumberInput}
+          handleNameInput={handleNameInput}
+          newName={newName}
+          newNumber={newNumber}
+        />
+        <h2>Numbers</h2>
+        <Persons
+          peopleToShow={peopleToShow}
+          handleDeletePerson={handleDeletePerson}
+        />
+      </div>
     </div>
   );
 };
