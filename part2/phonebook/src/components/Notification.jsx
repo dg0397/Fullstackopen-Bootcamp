@@ -6,8 +6,9 @@ const Notification = ({message}) => {
         backgroundColor : '#c42e1a',
         boxShadow: "5px 5px 5px #c42e1a"
     }
+    const condition = message.includes("deleted from the server") | message.includes("Validation failed")
     return (
-        <div className = "notification" style={message.includes('deleted')?redNotificarion : null} >
+        <div className = "notification" style={condition?redNotificarion : null} >
             {message}
         </div>
     )

@@ -75,20 +75,29 @@ const App = () => {
             setNewNumber("");
           })
           .catch((error) => {
-            setNotification(
-              `Information of ${changedPerson.name} has already deleted from the server`
-            );
-            setTimeout(() => {
-              setNotification("");
-            }, 5000);
-            setPersons(
-              persons.filter((person) => person.id !== changedPerson.id)
-            );
-            setPeopleToShow(
-              persons.filter((person) => person.id !== changedPerson.id)
-            );
-            setNewName("");
-            setNewNumber("");
+            if (error.response.status === 400) {
+              setNotification(
+                `Validation failed: The phone number must have at least 8 digits`
+              );
+              setTimeout(() => {
+                setNotification("");
+              }, 5000);
+            } else {
+              setNotification(
+                `Information of ${changedPerson.name} has already deleted from the server`
+              );
+              setTimeout(() => {
+                setNotification("");
+              }, 5000);
+              setPersons(
+                persons.filter((person) => person.id !== changedPerson.id)
+              );
+              setPeopleToShow(
+                persons.filter((person) => person.id !== changedPerson.id)
+              );
+              setNewName("");
+              setNewNumber("");
+            }
           });
       }
     } else {
@@ -97,16 +106,28 @@ const App = () => {
         number: newNumber,
       };
       //create a new Person and send the data to the server
-      personService.create(person).then((retornedPerson) => {
-        setNotification(`Added ${newName}`);
-        setTimeout(() => {
-          setNotification("");
-        }, 5000);
-        setPersons(persons.concat(retornedPerson));
-        setPeopleToShow(persons.concat(retornedPerson));
-        setNewName("");
-        setNewNumber("");
-      });
+      personService
+        .create(person)
+        .then((retornedPerson) => {
+          setNotification(`Added ${newName}`);
+          setTimeout(() => {
+            setNotification("");
+          }, 5000);
+          setPersons(persons.concat(retornedPerson));
+          setPeopleToShow(persons.concat(retornedPerson));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => {
+          if(error.response.status === 400){
+            setNotification(
+              `Validation failed: The phone number must have at least 8 digits and Name has to be at least 3 characters long`
+            );
+            setTimeout(() => {
+              setNotification("");
+            }, 5000);
+          }
+        });
     }
   };
 
@@ -120,7 +141,14 @@ const App = () => {
       personService
         .deletePerson(id)
         .then((response) => {
-          console.log(response);
+          setNotification(
+            `${
+              peopleToShow.find((person) => person.id === id).name
+            } was deleted succesfully`
+          );
+          setTimeout(() => {
+            setNotification("");
+          }, 5000);
           setPersons(persons.filter((person) => person.id !== id));
           setPeopleToShow(persons.filter((person) => person.id !== id));
         })

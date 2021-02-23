@@ -110,6 +110,7 @@ button{
   box-shadow: 2px 2px 2px #c1c1c1;
   transition: all .5s ease;
   outline: none;
+  cursor: pointer;
 }
 button:hover{
   box-shadow: none;
